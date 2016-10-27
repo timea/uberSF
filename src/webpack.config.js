@@ -26,8 +26,7 @@ module.exports = {
       applicationStyles: 'react/styles/app.scss',
       Main: 'react/components/Main.jsx',
       Front: 'react/components/Front.jsx',
-      Nav: 'react/components/Nav.jsx',
-      Container: 'react/components/Container'
+      Nav: 'react/components/Nav.jsx'
     },
     extensions: ['', '.js', '.jsx']
   },

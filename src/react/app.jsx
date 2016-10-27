@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom');
 var {Route, Router, IndexRoute, hashHistory} = require('react-router');
 var Main = require('Main');
 var Front = require('Front');
-import Container from './components/Container'
+import Map from './components/Map.jsx';
 
 
 // load foundation
@@ -17,7 +17,6 @@ ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={Main}>
       <IndexRoute component={Front}/>
-      <Route path="map" component={Container}/>
     </Route>
   </Router>,
   document.getElementById('app')
