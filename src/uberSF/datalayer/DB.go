@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"fmt"
 )
 
 // var lastId int
 var movies Movies
+var markers Markers
 
 func GetMovies() Movies {
 	return movies
@@ -60,6 +62,9 @@ func DBGetMovies() Movies {
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		log.Println(movie_id, movie_title)
+		
 		m := Movie{
 			Movie_id:movie_id,
 			Movie_title:movie_title,
@@ -80,6 +85,63 @@ func DBGetMovies() Movies {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	return GetMovies()
+}
+
+func GetMarkers() Markers {
+		fmt.Printf("%v", markers)
+		return markers
+	}
+
+func DBGetMarkers() Markers {
+	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/uber")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	var (
+		location_id int
+	  movie_id int
+	  location_description *string
+	  latitude float32
+	  longitude float32
+	  fun_fact *string
+	)
+
+	rows, err := db.Query("select * from movie_locations;")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	markers = nil
+
+	for rows.Next() {
+		err := rows.Scan(
+			&location_id,
+			&movie_id,
+			&location_description,
+			&latitude,
+			&longitude,
+			&fun_fact)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		ma := Marker{
+			Location_id:location_id,
+		  Movie_id:movie_id,
+		  Location_description:location_description,
+		  Latitude:latitude,
+		  Longitude:longitude,
+		  Fun_fact:fun_fact}
+
+		markers = append(markers, ma)
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return GetMarkers()
 }

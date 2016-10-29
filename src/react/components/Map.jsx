@@ -1,45 +1,66 @@
-var React = require('react');
+import React from 'react';
 
-const ARC_DE_TRIOMPHE_POSITION = {
-  lat: 48.873947,
-  lng: 2.295038
+const SF_POSITION = {
+  lat: 37.7643,
+  lng: -122.438
 };
 
-const EIFFEL_TOWER_POSITION = {
-  lat: 48.858608,
-  lng: 2.294471
-};
+const PUMPKIN = "/images/jack-o-lantern-icon.png";
 
 class Map extends React.Component {
   constructor() {
     super();
+    this.state = {data: []};
     this.addMarkers = this.addMarkers.bind(this);
+    this.loadMarkersFromServer();
     var $that = this;
     window.initMap = function() {
-      console.log(this)
       $that.map = new window.google.maps.Map($that.refs.map, {
-        center: EIFFEL_TOWER_POSITION,
+        center: SF_POSITION,
         zoom: 16
       });
     }
   }
 
-  componentDidMount() {
+  defaultProps() {
+        url: "/markers"
+  };
+
+  loadMarkersFromServer() {
+    $.ajax({
+        url: "/markers",
+        dataType: 'json',
+        success: (data) => {
+          this.setState({data: data});
+        },
+        error: (xhr, status, err) => {
+          console.error(this.props.url, status, err.toString());
+        }
+    });
   }
 
   addMarkers() {
-    var markerTriomphe = new google.maps.Marker({
-      position: ARC_DE_TRIOMPHE_POSITION,
-      map: this.map,
-      title: 'Arc de Triomphe',
-      icon: 'http://www.megaicons.net/static/img/icons_sizes/311/1029/24/jack-o-lantern-icon.png'
-    });
-    var markerEiffel = new google.maps.Marker({
-      position: EIFFEL_TOWER_POSITION,
-      map: this.map,
-      title: 'Eiffel',
-      icon: 'http://www.megaicons.net/static/img/icons_sizes/311/1029/24/jack-o-lantern-icon.png'
-    });
+    var data = this.state.data;
+    var $that = this;
+    var markers = [];
+    for (var i = 0; i < data.length; i++) {
+        var pos = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+        markers[i] = new google.maps.Marker({
+            position: pos,
+            map: $that.map,
+            icon: PUMPKIN,
+            description: data[i].location_description,
+            id: i
+        });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: data[i].location_description
+        });
+
+        google.maps.event.addListener(markers[i], 'click', function () {
+            infowindow.open($that.map, this);
+        })
+    }
   }
 
   render() {
@@ -57,4 +78,4 @@ class Map extends React.Component {
   }
 }
 
-module.exports = Map;
+export default Map;

@@ -24,4 +24,10 @@ var routes = Routes{
 		"/",
 		Index,
 	},
+	Route{
+		"GetAllMarkers",
+		"GET",
+		"/markers",
+		GetAllMarkers,
+	},
 }
