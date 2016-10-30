@@ -10,9 +10,11 @@ const PUMPKIN = "/images/pumpkin-evil-icon-glow.png";
 class WitchMap extends React.Component {
   constructor() {
     super();
-    this.state = {data: []};
+    this.state = {data: [], locations: []};
     this.addMarkers = this.addMarkers.bind(this);
+    this.compareLocations = this.compareLocations.bind(this);
     this.loadHorrorMarkersFromServer();
+    var circle = {};
     var $that = this;
     window.initMap = function() {
       $that.map = new window.google.maps.Map($that.refs.map, {
@@ -24,6 +26,8 @@ class WitchMap extends React.Component {
     }
   }
 
+
+
   loadHorrorMarkersFromServer() {
     var $that = this;
     $.ajax({
@@ -31,7 +35,9 @@ class WitchMap extends React.Component {
         dataType: 'json',
         success: (data) => {
           this.setState({data: data});
-          setTimeout(function(){$that.addMarkers(); }, 400);
+          setTimeout(function(){
+            $that.addMarkers();
+          }, 400);
         },
         error: (xhr, status, err) => {
           console.error(this.props.url, status, err.toString());
@@ -41,10 +47,12 @@ class WitchMap extends React.Component {
 
   addMarkers() {
     var data = this.state.data;
+    var locArray = this.state.locations;
     var $that = this;
     var markers = [];
     for (var i = 0; i < data.length; i++) {
         var pos = new window.google.maps.LatLng(data[i].latitude, data[i].longitude);
+        locArray.push(pos);
         markers[i] = new google.maps.Marker({
             position: pos,
             map: $that.map,
@@ -64,6 +72,7 @@ class WitchMap extends React.Component {
         });
 
       }
+    this.setState({locations: locArray});
   }
 
   componentDidMount() {
@@ -127,6 +136,25 @@ class WitchMap extends React.Component {
         direction = 1;
       }
     });
+    setInterval(this.compareLocations, 100);
+  }
+
+
+
+  compareLocations() {
+    var $that = this;
+    var markers = this.state.locations;
+    for (var i = 0; i < markers.length; i++) {
+
+      if (markers[i].lat()-0.0002 < $that.map.getCenter().lat() &&
+          markers[i].lat()+0.0002 > $that.map.getCenter().lat() &&
+          markers[i].lng()-0.0002 < $that.map.getCenter().lng() &&
+          markers[i].lng()+0.0002 > $that.map.getCenter().lng()) {
+
+        console.log("Bummmmmm");
+      }
+    }
+    //console.log($that.map.getCenter().lat());
   }
 
   render() {
