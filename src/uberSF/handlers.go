@@ -7,7 +7,10 @@ import (
 	"io/ioutil"
 	"os"
 	"github.com/timea/uberSF/src/uberSF/datalayer"
+	"github.com/gorilla/mux"
 )
+
+
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	pwd, _ := os.Getwd()
@@ -21,8 +24,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func GetAllMovies(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	datalayer.DBGetMovies()
-	if err := json.NewEncoder(w).Encode(datalayer.GetMovies()); err != nil {
+	if err := json.NewEncoder(w).Encode(datalayer.DBGetMovies()); err != nil {
 		panic(err)
 	}
 }
@@ -30,8 +32,17 @@ func GetAllMovies(w http.ResponseWriter, r *http.Request) {
 func GetAllMarkers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	datalayer.DBGetMarkers()
-	if err := json.NewEncoder(w).Encode(datalayer.GetMarkers()); err != nil {
+	if err := json.NewEncoder(w).Encode(datalayer.DBGetMarkers()); err != nil {
+		panic(err)
+	}
+}
+
+func GetAllGenreMarkers(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	genre := vars["genre"]
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(datalayer.DBGetGenreMovieMarkers(genre)); err != nil {
 		panic(err)
 	}
 }

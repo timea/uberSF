@@ -30,4 +30,10 @@ var routes = Routes{
 		"/markers",
 		GetAllMarkers,
 	},
+	Route{
+		"GetAllGenreMarkers",
+		"GET",
+		"/genre-markers/{genre}",
+		GetAllGenreMarkers,
+	},
 }

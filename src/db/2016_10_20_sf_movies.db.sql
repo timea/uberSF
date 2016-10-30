@@ -1,18 +1,18 @@
 BEGIN TRANSACTION;
 CREATE TABLE movies (
-	movie_id INTEGER NOT NULL, 
-	movie_title VARCHAR(100) NOT NULL, 
-	release_year INTEGER, 
-	production_company VARCHAR(50), 
-	director_id INTEGER, 
-	movie_writers VARCHAR(50), 
-	movie_distributor VARCHAR(50), 
-	imdb_id VARCHAR(9), 
-	imdb_url VARCHAR(60), 
-	image_url VARCHAR(75), 
-	genre VARCHAR(20), 
-	plot TEXT, 
-	PRIMARY KEY (movie_id), 
+	movie_id INTEGER NOT NULL,
+	movie_title VARCHAR(100) NOT NULL,
+	release_year INTEGER,
+	production_company VARCHAR(50),
+	director_id INTEGER,
+	movie_writers VARCHAR(50),
+	movie_distributor VARCHAR(50),
+	imdb_id VARCHAR(9),
+	imdb_url VARCHAR(60),
+	image_url VARCHAR(75),
+	genre VARCHAR(200), 
+	plot TEXT,
+	PRIMARY KEY (movie_id),
 	FOREIGN KEY(director_id) REFERENCES directors (director_id)
 );
 INSERT INTO `movies` VALUES (1,'180',2011,'SPI Cinemas',1,'Umarji Anuradha, Jayendra, Aarthi Sriram, & Suba',NULL,'tt1855110','http://www.imdb.com/title/tt1855110/?ref_=fn_al_tt_1','http://ia.media-imdb.com/images/M/MV5BMTQ1NDExNTA5Ml5BMl5BanBnXkFtZTcwOTc3MjA2NQ@@._V1_SX300.jpg','Drama, Romance','A young man Ajay (cancer victim) meets two lovely women Renu (wife) and Vidya (journalist) in his life.');
@@ -282,13 +282,13 @@ INSERT INTO `movies` VALUES (263,'Woman on Top',2000,'Fox Searchlight Pictures',
 INSERT INTO `movies` VALUES (264,'Yours, Mine and Ours',1968,'Desilu Productions',224,'Bob Carroll, Jr.','United Artists','tt0063829','http://www.imdb.com/title/tt0063829/?ref_=fn_al_tt_1','http://ia.media-imdb.com/images/M/MV5BMjEzNTEyMzIwMV5BMl5BanBnXkFtZTcwMjY1Nzg0NQ@@._V1_SX300.jpg','Comedy, Family','When a widower with 10 children marries a widow with 8, can the 20 of them ever come together as one big happy family? From finding a house big enough for all of them and learning to make ...');
 INSERT INTO `movies` VALUES (265,'Zodiac',2007,'Paramount Pictures',187,'James Vanderbilt','Paramount Pictures','tt0443706','http://www.imdb.com/title/tt0443706/?ref_=fn_al_tt_1','http://ia.media-imdb.com/images/M/MV5BMTQxNjc2NzAwNF5BMl5BanBnXkFtZTcwMDg3NzMzMw@@._V1_SX300.jpg','Crime, Drama, Mystery','A San Francisco cartoonist becomes an amateur detective obsessed with tracking down the Zodiac killer.');
 CREATE TABLE movie_locations (
-	location_id INTEGER NOT NULL, 
-	movie_id INTEGER NOT NULL, 
-	location_description VARCHAR(100) NOT NULL, 
-	latitude FLOAT, 
-	longitude FLOAT, 
-	fun_fact TEXT, 
-	PRIMARY KEY (location_id), 
+	location_id INTEGER NOT NULL,
+	movie_id INTEGER NOT NULL,
+	location_description VARCHAR(100) NOT NULL,
+	latitude FLOAT,
+	longitude FLOAT,
+	fun_fact TEXT,
+	PRIMARY KEY (location_id),
 	FOREIGN KEY(movie_id) REFERENCES movies (movie_id)
 );
 INSERT INTO `movie_locations` VALUES (1,1,'Randall Musuem',37.7643243,-122.4384077,NULL);
@@ -1389,11 +1389,11 @@ INSERT INTO `movie_locations` VALUES (1095,262,'835-865 Market Street at 5th Str
 INSERT INTO `movie_locations` VALUES (1096,263,'312 Fillmore Street',37.772407,-122.4303972,NULL);
 INSERT INTO `movie_locations` VALUES (1097,265,'SF Chronicle Building (901 Mission St)',37.7892921,-122.3989821,NULL);
 CREATE TABLE movie_actors (
-	movie_actor_id INTEGER NOT NULL, 
-	movie_id INTEGER NOT NULL, 
-	actor_id INTEGER NOT NULL, 
-	PRIMARY KEY (movie_actor_id), 
-	FOREIGN KEY(movie_id) REFERENCES movies (movie_id), 
+	movie_actor_id INTEGER NOT NULL,
+	movie_id INTEGER NOT NULL,
+	actor_id INTEGER NOT NULL,
+	PRIMARY KEY (movie_actor_id),
+	FOREIGN KEY(movie_id) REFERENCES movies (movie_id),
 	FOREIGN KEY(actor_id) REFERENCES actors (actor_id)
 );
 INSERT INTO `movie_actors` VALUES (1,1,1);
@@ -1969,8 +1969,8 @@ INSERT INTO `movie_actors` VALUES (570,264,425);
 INSERT INTO `movie_actors` VALUES (571,265,426);
 INSERT INTO `movie_actors` VALUES (572,265,214);
 CREATE TABLE directors (
-	director_id INTEGER NOT NULL, 
-	director_name VARCHAR(50) NOT NULL, 
+	director_id INTEGER NOT NULL,
+	director_name VARCHAR(50) NOT NULL,
 	PRIMARY KEY (director_id)
 );
 INSERT INTO `directors` VALUES (1,'Jayendra');
@@ -2198,8 +2198,8 @@ INSERT INTO `directors` VALUES (222,'Norman Foster');
 INSERT INTO `directors` VALUES (223,'Fina Torres');
 INSERT INTO `directors` VALUES (224,'Melville Shavelson');
 CREATE TABLE actors (
-	actor_id INTEGER NOT NULL, 
-	actor_name VARCHAR(50) NOT NULL, 
+	actor_id INTEGER NOT NULL,
+	actor_name VARCHAR(50) NOT NULL,
 	PRIMARY KEY (actor_id)
 );
 INSERT INTO `actors` VALUES (1,'Siddarth');
