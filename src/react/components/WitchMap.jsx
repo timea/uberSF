@@ -10,11 +10,10 @@ const PUMPKIN = "/images/pumpkin-evil-icon-glow.png";
 class WitchMap extends React.Component {
   constructor() {
     super();
-    this.state = {data: [], locations: []};
+    this.state = {data: [], markers: []};
     this.addMarkers = this.addMarkers.bind(this);
     this.compareLocations = this.compareLocations.bind(this);
     this.loadHorrorMarkersFromServer();
-    var circle = {};
     var $that = this;
     window.initMap = function() {
       $that.map = new window.google.maps.Map($that.refs.map, {
@@ -47,12 +46,10 @@ class WitchMap extends React.Component {
 
   addMarkers() {
     var data = this.state.data;
-    var locArray = this.state.locations;
     var $that = this;
     var markers = [];
     for (var i = 0; i < data.length; i++) {
         var pos = new window.google.maps.LatLng(data[i].latitude, data[i].longitude);
-        locArray.push(pos);
         markers[i] = new google.maps.Marker({
             position: pos,
             map: $that.map,
@@ -70,9 +67,8 @@ class WitchMap extends React.Component {
             this.getMap()._infoWindow.setContent(this.description);
             this.getMap()._infoWindow.open(this.getMap(), this);
         });
-
       }
-    this.setState({locations: locArray});
+    this.setState({markers: markers});
   }
 
   componentDidMount() {
@@ -139,22 +135,23 @@ class WitchMap extends React.Component {
     setInterval(this.compareLocations, 100);
   }
 
-
-
   compareLocations() {
     var $that = this;
-    var markers = this.state.locations;
+    var markers = this.state.markers;
+    var toTakeOut = [];
     for (var i = 0; i < markers.length; i++) {
 
-      if (markers[i].lat()-0.0002 < $that.map.getCenter().lat() &&
-          markers[i].lat()+0.0002 > $that.map.getCenter().lat() &&
-          markers[i].lng()-0.0002 < $that.map.getCenter().lng() &&
-          markers[i].lng()+0.0002 > $that.map.getCenter().lng()) {
-
+      if (markers[i].position.lat()-0.0002 < $that.map.getCenter().lat() &&
+          markers[i].position.lat()+0.0002 > $that.map.getCenter().lat() &&
+          markers[i].position.lng()-0.0002 < $that.map.getCenter().lng() &&
+          markers[i].position.lng()+0.0002 > $that.map.getCenter().lng()) {
+        toTakeOut.push(markers[i]);
+        markers[i].setMap(null)
         console.log("Bummmmmm");
       }
     }
-    //console.log($that.map.getCenter().lat());
+    var diff = $(markers).not(toTakeOut).get();
+    $that.setState({markers: diff});
   }
 
   render() {
