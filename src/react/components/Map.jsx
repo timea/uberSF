@@ -32,6 +32,7 @@ class Map extends React.Component {
         dataType: 'json',
         success: (data) => {
           this.setState({data: data});
+          this.addMarkers();
         },
         error: (xhr, status, err) => {
           console.error(this.props.url, status, err.toString());
@@ -44,7 +45,7 @@ class Map extends React.Component {
     var $that = this;
     var markers = [];
     for (var i = 0; i < data.length; i++) {
-        var pos = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+        var pos = new window.google.maps.LatLng(data[i].latitude, data[i].longitude);
         markers[i] = new google.maps.Marker({
             position: pos,
             map: $that.map,
@@ -53,14 +54,17 @@ class Map extends React.Component {
             id: i
         });
 
-        var infowindow = new google.maps.InfoWindow({
-            content: data[i].location_description
+        google.maps.event.addListener(markers[i], 'click', function() {
+            // this -> the marker on which the onclick event is being attached
+            if (!this.getMap()._infoWindow) {
+                this.getMap()._infoWindow = new google.maps.InfoWindow();
+            }
+            this.getMap()._infoWindow.close();
+            this.getMap()._infoWindow.setContent(this.description);
+            this.getMap()._infoWindow.open(this.getMap(), this);
         });
 
-        google.maps.event.addListener(markers[i], 'click', function () {
-            infowindow.open($that.map, this);
-        })
-    }
+      }
   }
 
   render() {

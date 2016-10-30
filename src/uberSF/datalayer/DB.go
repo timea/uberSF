@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
-	"fmt"
 )
 
 // var lastId int
@@ -63,8 +62,6 @@ func DBGetMovies() Movies {
 			log.Fatal(err)
 		}
 
-		log.Println(movie_id, movie_title)
-		
 		m := Movie{
 			Movie_id:movie_id,
 			Movie_title:movie_title,
@@ -89,7 +86,6 @@ func DBGetMovies() Movies {
 }
 
 func GetMarkers() Markers {
-		fmt.Printf("%v", markers)
 		return markers
 	}
 
