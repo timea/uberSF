@@ -1,0 +1,13 @@
+.witch-container {
+  position: relative;
+  width: 80%;
+}
+
+#witch {
+  position: absolute;
+  z-index: 2;
+  bottom: 10px;
+  left: 50%;
+  margin-left: -35px;
+  width: 70px;
+}
