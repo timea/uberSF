@@ -7,12 +7,12 @@ const SF_POSITION = {
 
 const PUMPKIN = "/images/jack-o-lantern-icon.png";
 
-class Map extends React.Component {
+class WitchMap extends React.Component {
   constructor() {
     super();
     this.state = {data: []};
     this.addMarkers = this.addMarkers.bind(this);
-    this.loadMarkersFromServer();
+    this.loadHorrorMarkersFromServer();
     var $that = this;
     window.initMap = function() {
       $that.map = new window.google.maps.Map($that.refs.map, {
@@ -22,17 +22,14 @@ class Map extends React.Component {
     }
   }
 
-  defaultProps() {
-        url: "/markers"
-  };
-
-  loadMarkersFromServer() {
+  loadHorrorMarkersFromServer() {
+    var $that = this;
     $.ajax({
-        url: "/markers",
+        url: "/genre-markers/Horror",
         dataType: 'json',
         success: (data) => {
           this.setState({data: data});
-          this.addMarkers();
+          setTimeout(function(){$that.addMarkers(); }, 400);
         },
         error: (xhr, status, err) => {
           console.error(this.props.url, status, err.toString());
@@ -73,6 +70,7 @@ class Map extends React.Component {
       height: '100vh',
       border: '1px solid black'
     };
+
     return (
       <div>
         <button onClick={this.addMarkers}>Add markers</button>
@@ -82,4 +80,4 @@ class Map extends React.Component {
   }
 }
 
-export default Map;
+export default WitchMap;

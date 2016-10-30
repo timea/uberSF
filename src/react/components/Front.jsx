@@ -1,12 +1,12 @@
 var React = require('react');
-import Map from './Map';
+import WitchMap from './WitchMap';
 
 var Front = React.createClass({
   render: function() {
     return (
       <div>
         <h1>Welcome to UberSF!</h1>
-        <Map/>
+        <WitchMap/>
       </div>
     );
   }
