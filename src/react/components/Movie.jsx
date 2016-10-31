@@ -8,11 +8,10 @@ class Movie extends React.Component {
     return (
       <div className = "movie">
         <h2 className = "movieName">
-          {this.props.movie_title}
+          <a href={this.props.imdb_url}>{this.props.movie_title}</a>
         </h2>
         <p>{this.props.release_year}</p>
-        <img src={this.props.image_url}/>
-        <p>{this.props.imdb_url}</p>
+        <div>{this.props.plot}</div>
       </div>
     );
   }

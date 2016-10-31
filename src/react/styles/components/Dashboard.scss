@@ -7,10 +7,17 @@
 .points-container {
   .points {
      font-size: 400%;
-     text-align: right;
+     text-align: center;
   }
 
   .text {
-    text-align: right;
+    text-align: center;
+    color: #dce3ef;
   }
+}
+
+.info {
+  color: #dce3ef;
+  font-size: 200%;
+  text-align: center;
 }

@@ -1,9 +1,10 @@
 import React from 'react';
 import Dashboard from './Dashboard';
+import MovieList from './MovieList';
 
 const SF_POSITION = {
-  lat: 37.7643,
-  lng: -122.438
+  lat: 37.7901,
+  lng: -122.4
 };
 
 const PUMPKIN = "/images/pumpkin-evil-icon-glow.png";
@@ -18,10 +19,12 @@ class WitchMap extends React.Component {
       cent:{},
       timerState: "stopped",
       count: 0,
-      takenOut:[]};
+      takenOut:[],
+      movieData:[]};
     this.addMarkers = this.addMarkers.bind(this);
     this.compareLocations = this.compareLocations.bind(this);
     this.setTimerState = this.setTimerState.bind(this);
+    this.loadMovieFromServer = this.loadMovieFromServer.bind(this);
     this.loadHorrorMarkersFromServer();
     var $that = this;
     window.initMap = function() {
@@ -168,7 +171,7 @@ class WitchMap extends React.Component {
     var diff = $(markers).not(toTakeOut).get();
 
     $that.setState({markers: diff, score: score});
-    console.log("state " + $that.state.takenOut);
+    $that.loadMovieFromServer();
   }
 
   setTimerState() {
@@ -194,25 +197,47 @@ class WitchMap extends React.Component {
       }, 1000);
   }
 
+  loadMovieFromServer() {
+    var url = "/movies/" + this.state.takenOut.toString();
+    if( url != "/movies/")
+    {
+      console.log("ajax call is called");
+      var $that = this;
+      $.ajax({
+          url: url,
+          dataType: 'json',
+          success: (data) => {
+            this.setState({movieData: data});
+            console.log("data from movie ajax "+$that.state.movieData);
+          },
+          error: (xhr, status, err) => {
+            console.error(this.props.url, status, err.toString());
+          }
+      });
+    }
+  }
+
   render() {
     const mapStyle = {
-      height: '100vh',
-      border: '1px solid black'
+      height: '100vh'
     };
-    console.log("Witchmap rerendered state " + this.state.takenOut);
-    var url = "/movies/" + this.state.takenOut.toString();
     return (
       <div>
-        <div className="witch-container">
-          <div ref="map" style={mapStyle}>I should be a map!</div>
-          <img id="witch" src="/images/witch-color-s.png" />
+        <div>
+          <div className="witch-container">
+            <div ref="map" style={mapStyle}>I should be a map!</div>
+            <img id="witch" src="/images/witch-color-s.png" />
+          </div>
+          <Dashboard
+            score={this.state.score}
+            timerState={this.state.timerState}
+            count={this.state.count}
+            takenOut={this.state.takenOut}
+            />
         </div>
-        <Dashboard
-          score={this.state.score}
-          timerState={this.state.timerState}
-          count={this.state.count}
-          takenOut={this.state.takenOut}
-          url={url}/>
+        <div>
+          <MovieList data={this.state.movieData}/>
+        </div>
       </div>
     );
   }

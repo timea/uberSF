@@ -9,20 +9,19 @@ class MovieList extends React.Component {
 
   render() {
     var $that = this;
-    console.log("properties in movielist " + $that.props.data);
     var movies = $that.props.data.map(function(movie) {
       return (
         <Movie
           key={movie.location_id}
           movie_title={movie.movie_title}
           release_year={movie.release_year}
-          image_url={movie.image_url}
           imdb_url={movie.imdb_url}
+          plot={movie.plot}
           />
       );
     });
     return(
-      <div clasName="movieList">
+      <div className="movieList">
         {movies}
       </div>
     );
