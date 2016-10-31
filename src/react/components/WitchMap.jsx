@@ -17,7 +17,7 @@ class WitchMap extends React.Component {
       markers: [],
       score: 0,
       cent:{},
-      timerState: "stopped",
+      timerState: "initial",
       count: 0,
       takenOut:[],
       movieData:[]};
@@ -157,38 +157,42 @@ class WitchMap extends React.Component {
         direction = 1;
       }
     });
-    setInterval(this.compareLocations, 100);
-    setInterval(this.setTimerState, 100);
+    if(this.state.timerState != "stopped") {
+      setInterval(this.compareLocations, 100);
+      setInterval(this.setTimerState, 100);
+    }
   }
 
   compareLocations() {
-    var $that = this;
-    var markers = this.state.markers;
-    var toTakeOut = [];
-    var score = $that.state.score;
+    if(this.state.timerState != "stopped"){
+      var $that = this;
+      var markers = this.state.markers;
+      var toTakeOut = [];
+      var score = $that.state.score;
 
-    for (var i = 0; i < markers.length; i++) {
+      for (var i = 0; i < markers.length; i++) {
 
-      if (markers[i].position.lat()-0.0002 < $that.map.getCenter().lat() &&
-          markers[i].position.lat()+0.0002 > $that.map.getCenter().lat() &&
-          markers[i].position.lng()-0.0002 < $that.map.getCenter().lng() &&
-          markers[i].position.lng()+0.0002 > $that.map.getCenter().lng()) {
-        toTakeOut.push(markers[i]);
-        markers[i].setMap(null)
-        console.log("Bummmmmm, found some spell inspiration!");
-        $that.setState({takenOut: $that.state.takenOut.concat(markers[i].id)});
-        score += Math.round(markers[i].position.lat());
+        if (markers[i].position.lat()-0.0002 < $that.map.getCenter().lat() &&
+            markers[i].position.lat()+0.0002 > $that.map.getCenter().lat() &&
+            markers[i].position.lng()-0.0002 < $that.map.getCenter().lng() &&
+            markers[i].position.lng()+0.0002 > $that.map.getCenter().lng()) {
+          toTakeOut.push(markers[i]);
+          markers[i].setMap(null)
+          console.log("Bummmmmm, found some spell inspiration!");
+          $that.setState({takenOut: $that.state.takenOut.concat(markers[i].id)});
+          score += Math.round(markers[i].position.lat());
+        }
       }
-    }
-    var diff = $(markers).not(toTakeOut).get();
+      var diff = $(markers).not(toTakeOut).get();
 
-    $that.setState({markers: diff, score: score});
-    $that.loadMovieFromServer();
+      $that.setState({markers: diff, score: score});
+      $that.loadMovieFromServer();
+    }
   }
 
   setTimerState() {
     var $that = this;
-    if($that.state.timerState != "started") {
+    if($that.state.timerState == "initial") {
       $that.setState({cent: new window.google.maps.LatLng(SF_POSITION['lat'], SF_POSITION['lng'])});
       if ($that.state.cent.lat()-0.000001 < $that.map.getCenter().lat() &&
           $that.state.cent.lat()+0.000001 > $that.map.getCenter().lat() &&
@@ -202,11 +206,54 @@ class WitchMap extends React.Component {
   }
 
   startTimer() {
+    if(this.state.timerState != "stopped"){
       this.timer = setInterval(() => {
-          this.setState({
-            count: this.state.count + 1
-          });
+        if(this.state.count<240){
+           this.setState({
+             count: this.state.count + 1
+           });
+         } else {
+           this.setState({
+             timerState: "stopped"
+           });
+           clearInterval(this.timer);
+           console.log("");
+           console.log("The game is OVER");
+           if(this.state.score > 600) {
+             console.log("");
+             console.log("You managed to get so many pumkins, you gotta be part of the top 1% of humanity.");
+             console.log("");
+             console.log("Sabrina is so happy, she decided to be only a good witch from here on!");
+             console.log("");
+             console.log("Keep in mind: 'Magic is where you find it.' Tom Ryan");
+             console.log("");
+             console.log("Have a lovely day!");
+           }
+           if(this.state.score > 300 &&
+              this.state.score < 600) {
+             console.log("");
+             console.log("You managed to inspire Sabrina with the spells found, she can keep her young looks!");
+             console.log("");
+             console.log("Keep in mind: 'Magic is where you find it.' Tom Ryan");
+             console.log("");
+             console.log("Have a lovely day!");
+
+           }
+           if(this.state.score > 200 &&
+              this.state.score < 300) {
+             console.log("");
+             console.log("You missed only by a little bit. Keep trying to save the day!");
+           }
+           if(this.state.score > 0 &&
+              this.state.score < 200) {
+             console.log("");
+             console.log("Keep flying around. You might want to zoom out more to get an overview. :).");
+             console.log("");
+             console.log("(F5 to replay and save the say!)");
+           }
+         }
       }, 1000);
+    }
   }
 
   loadMovieFromServer() {
@@ -231,6 +278,11 @@ class WitchMap extends React.Component {
     const mapStyle = {
       height: '100vh'
     };
+    // switch (this.state.timerState){
+    //   case "stopped":
+    //     console.log("The game is over");
+    //     break;
+    // }
     return (
       <div>
         <div>
