@@ -36,4 +36,10 @@ var routes = Routes{
 		"/genre-markers/{genre}",
 		GetAllGenreMarkers,
 	},
+	Route{
+		"GetSelectedMovies",
+		"GET",
+		"/movies/{selected}",
+		GetSelectedMovies,
+	},
 }

@@ -17,7 +17,8 @@ class WitchMap extends React.Component {
       score: 0,
       cent:{},
       timerState: "stopped",
-      count: 0};
+      count: 0,
+      takenOut:[]};
     this.addMarkers = this.addMarkers.bind(this);
     this.compareLocations = this.compareLocations.bind(this);
     this.setTimerState = this.setTimerState.bind(this);
@@ -63,7 +64,7 @@ class WitchMap extends React.Component {
             map: $that.map,
             icon: PUMPKIN,
             description: data[i].location_description,
-            id: i
+            id: data[i].movie_id
         });
 
         google.maps.event.addListener(markers[i], 'click', function() {
@@ -159,11 +160,15 @@ class WitchMap extends React.Component {
         toTakeOut.push(markers[i]);
         markers[i].setMap(null)
         console.log("Bummmmmm");
+        console.log(markers[i].id);
+        $that.setState({takenOut: $that.state.takenOut.concat(markers[i].id)});
         score += Math.round(markers[i].position.lat());
       }
     }
     var diff = $(markers).not(toTakeOut).get();
+
     $that.setState({markers: diff, score: score});
+    console.log("state " + $that.state.takenOut);
   }
 
   setTimerState() {
@@ -194,13 +199,20 @@ class WitchMap extends React.Component {
       height: '100vh',
       border: '1px solid black'
     };
+    console.log("Witchmap rerendered state " + this.state.takenOut);
+    var url = "/movies/" + this.state.takenOut.toString();
     return (
       <div>
         <div className="witch-container">
           <div ref="map" style={mapStyle}>I should be a map!</div>
           <img id="witch" src="/images/witch-color-s.png" />
         </div>
-        <Dashboard score={this.state.score} timerState={this.state.timerState} count={this.state.count}/>
+        <Dashboard
+          score={this.state.score}
+          timerState={this.state.timerState}
+          count={this.state.count}
+          takenOut={this.state.takenOut}
+          url={url}/>
       </div>
     );
   }
