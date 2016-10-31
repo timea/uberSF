@@ -10,7 +10,10 @@ const PUMPKIN = "/images/pumpkin-evil-icon-glow.png";
 class WitchMap extends React.Component {
   constructor() {
     super();
-    this.state = {data: [], markers: []};
+    this.state = {
+      data: [],
+      markers: [],
+      score: 0};
     this.addMarkers = this.addMarkers.bind(this);
     this.compareLocations = this.compareLocations.bind(this);
     this.loadHorrorMarkersFromServer();
@@ -139,6 +142,8 @@ class WitchMap extends React.Component {
     var $that = this;
     var markers = this.state.markers;
     var toTakeOut = [];
+    var score = $that.state.score;
+
     for (var i = 0; i < markers.length; i++) {
 
       if (markers[i].position.lat()-0.0002 < $that.map.getCenter().lat() &&
@@ -148,10 +153,14 @@ class WitchMap extends React.Component {
         toTakeOut.push(markers[i]);
         markers[i].setMap(null)
         console.log("Bummmmmm");
+        score += markers[i].position.lat();
+        console.log("in while loop score " +score);
       }
     }
     var diff = $(markers).not(toTakeOut).get();
-    $that.setState({markers: diff});
+    console.log("after while loop score " +score);
+    $that.setState({markers: diff, score: score});
+    console.log("after while loop state score " +$that.state.score);
   }
 
   render() {
@@ -162,9 +171,6 @@ class WitchMap extends React.Component {
 
     return (
       <div>
-        <button onClick={this.addMarkers}>Add markers</button>
-
-
         <div className="witch-container">
           <div ref="map" style={mapStyle}>I should be a map!</div>
           <img id="witch" src="/images/witch-color-s.png" />
