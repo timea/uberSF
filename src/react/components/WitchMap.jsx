@@ -1,4 +1,5 @@
 import React from 'react';
+import Dashboard from './Dashboard';
 
 const SF_POSITION = {
   lat: 37.7643,
@@ -13,9 +14,13 @@ class WitchMap extends React.Component {
     this.state = {
       data: [],
       markers: [],
-      score: 0};
+      score: 0,
+      cent:{},
+      timerState: "stopped",
+      count: 0};
     this.addMarkers = this.addMarkers.bind(this);
     this.compareLocations = this.compareLocations.bind(this);
+    this.setTimerState = this.setTimerState.bind(this);
     this.loadHorrorMarkersFromServer();
     var $that = this;
     window.initMap = function() {
@@ -136,6 +141,7 @@ class WitchMap extends React.Component {
       }
     });
     setInterval(this.compareLocations, 100);
+    setInterval(this.setTimerState, 100);
   }
 
   compareLocations() {
@@ -153,14 +159,34 @@ class WitchMap extends React.Component {
         toTakeOut.push(markers[i]);
         markers[i].setMap(null)
         console.log("Bummmmmm");
-        score += markers[i].position.lat();
-        console.log("in while loop score " +score);
+        score += Math.round(markers[i].position.lat());
       }
     }
     var diff = $(markers).not(toTakeOut).get();
-    console.log("after while loop score " +score);
     $that.setState({markers: diff, score: score});
-    console.log("after while loop state score " +$that.state.score);
+  }
+
+  setTimerState() {
+    var $that = this;
+    if($that.state.timerState != "started") {
+      $that.setState({cent: new window.google.maps.LatLng(SF_POSITION['lat'], SF_POSITION['lng'])});
+      if ($that.state.cent.lat()-0.000001 < $that.map.getCenter().lat() &&
+          $that.state.cent.lat()+0.000001 > $that.map.getCenter().lat() &&
+          $that.state.cent.lng()-0.000001 < $that.map.getCenter().lng() &&
+          $that.state.cent.lng()+0.000001 > $that.map.getCenter().lng()){
+      } else {
+        $that.setState({timerState: 'started'});
+        $that.startTimer();
+      }
+    }
+  }
+
+  startTimer() {
+      this.timer = setInterval(() => {
+        this.setState({
+          count: this.state.count + 1
+        });
+      }, 1000);
   }
 
   render() {
@@ -168,13 +194,13 @@ class WitchMap extends React.Component {
       height: '100vh',
       border: '1px solid black'
     };
-
     return (
       <div>
         <div className="witch-container">
           <div ref="map" style={mapStyle}>I should be a map!</div>
           <img id="witch" src="/images/witch-color-s.png" />
         </div>
+        <Dashboard score={this.state.score} timerState={this.state.timerState} count={this.state.count}/>
       </div>
     );
   }
