@@ -31,10 +31,23 @@ class WitchMap extends React.Component {
       $that.map = new window.google.maps.Map($that.refs.map, {
         center: SF_POSITION,
         zoom: 34,
-        mapTypeId: 'satellite',
-        zoomControl: false
+        mapTypeId: 'satellite'
       });
     }
+    console.log("Welcome to the game!");
+    console.log("");
+    console.log("Sabrina, the witch needs some help from you. She really needs to get some inspiration to figure out a spell to keep her youth, just like in the movies.");
+    console.log("She can find spells spread around the city of San Fran on the locations of scenes from horror movies shot here.");
+    console.log("As halloween is almost over all over the world, you have 4 minutes to find enough jack-o-lanterns in the city dropped on these movie locations.");
+    console.log("To read the spell just fly over the lanterns, but BE WARNED: if you fly to high(zoomed too much out), you might not be able to read the spell!");
+    console.log("");
+    console.log("You can zoom in and out on the map with the usual controls.");
+    console.log("Click on the map to start flying with the arrow keys.");
+    console.log("");
+    console.log("When the time is up, you can see if you helped her to get enough inspired.");
+    console.log("");
+    console.log("Best of LUCK and have a safe flight!");
+
   }
 
 
@@ -162,8 +175,7 @@ class WitchMap extends React.Component {
           markers[i].position.lng()+0.0002 > $that.map.getCenter().lng()) {
         toTakeOut.push(markers[i]);
         markers[i].setMap(null)
-        console.log("Bummmmmm");
-        console.log(markers[i].id);
+        console.log("Bummmmmm, found some spell inspiration!");
         $that.setState({takenOut: $that.state.takenOut.concat(markers[i].id)});
         score += Math.round(markers[i].position.lat());
       }
@@ -191,9 +203,9 @@ class WitchMap extends React.Component {
 
   startTimer() {
       this.timer = setInterval(() => {
-        this.setState({
-          count: this.state.count + 1
-        });
+          this.setState({
+            count: this.state.count + 1
+          });
       }, 1000);
   }
 
@@ -201,14 +213,12 @@ class WitchMap extends React.Component {
     var url = "/movies/" + this.state.takenOut.toString();
     if( url != "/movies/")
     {
-      console.log("ajax call is called");
       var $that = this;
       $.ajax({
           url: url,
           dataType: 'json',
           success: (data) => {
             this.setState({movieData: data});
-            console.log("data from movie ajax "+$that.state.movieData);
           },
           error: (xhr, status, err) => {
             console.error(this.props.url, status, err.toString());
@@ -236,7 +246,7 @@ class WitchMap extends React.Component {
             />
         </div>
         <div>
-          <MovieList data={this.state.movieData}/>
+          <MovieList data={this.state.movieData} key="key"/>
         </div>
       </div>
     );

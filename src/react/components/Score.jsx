@@ -7,7 +7,7 @@ class Score extends React.Component {
         <p className="points">
           {this.props.score}
         </p>
-        <p className="text">points</p>
+        <p className="text">spells</p>
       </div>
     );
   }
