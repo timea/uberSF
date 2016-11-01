@@ -1,4 +1,4 @@
-package datalayer
+package main
 
 type Marker struct {
   Location_id int             `json:"location_id"`

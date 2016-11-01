@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"io/ioutil"
 	"os"
-	"github.com/timea/uberSF/src/uberSF/datalayer"
 	"github.com/gorilla/mux"
 )
 
@@ -24,7 +23,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func GetAllMovies(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(datalayer.DBGetMovies()); err != nil {
+	if err := json.NewEncoder(w).Encode(DBGetMovies()); err != nil {
 		panic(err)
 	}
 }
@@ -32,7 +31,7 @@ func GetAllMovies(w http.ResponseWriter, r *http.Request) {
 func GetAllMarkers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(datalayer.DBGetMarkers()); err != nil {
+	if err := json.NewEncoder(w).Encode(DBGetMarkers()); err != nil {
 		panic(err)
 	}
 }
@@ -42,7 +41,7 @@ func GetAllGenreMarkers(w http.ResponseWriter, r *http.Request) {
 	genre := vars["genre"]
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(datalayer.DBGetGenreMovieMarkers(genre)); err != nil {
+	if err := json.NewEncoder(w).Encode(DBGetGenreMovieMarkers(genre)); err != nil {
 		panic(err)
 	}
 }
@@ -52,7 +51,7 @@ func GetSelectedMovies(w http.ResponseWriter, r *http.Request) {
 	movies := vars["selected"]
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(datalayer.DBGetSelectedMovies(movies)); err != nil {
+	if err := json.NewEncoder(w).Encode(DBGetSelectedMovies(movies)); err != nil {
 		panic(err)
 	}
 }

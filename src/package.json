@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "karma start",
-    "start": "node server.js"
+    "start": "go install && uberSF"
   },
   "author": "Timea Kiss",
   "license": "MIT",

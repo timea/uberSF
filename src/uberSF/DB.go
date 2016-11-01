@@ -1,4 +1,4 @@
-package datalayer
+package main
 
 import (
 	"database/sql"

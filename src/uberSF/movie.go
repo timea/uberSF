@@ -1,4 +1,4 @@
-package datalayer
+package main
 
 type Movie struct {
 	Movie_id int 								`json:"movie_id"`

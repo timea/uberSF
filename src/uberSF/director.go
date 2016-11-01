@@ -1,4 +1,4 @@
-package datalayer
+package main
 
 type Director struct {
   director_id int       `json:"director_id"`
