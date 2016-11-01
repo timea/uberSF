@@ -2,7 +2,7 @@ package datalayer
 
 import (
 	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 )
 
@@ -11,7 +11,7 @@ var movies Movies
 var markers Markers
 
 func DBGetMovies() Movies {
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/uber")
+	db, err := sql.Open("sqlite3", "../db/sf_movies.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,7 +31,7 @@ func DBGetMovies() Movies {
 		genre *string
 		plot *string
 	)
-	rows, err := db.Query("select * from movies;")
+	rows, err := db.Query("select * from movies")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -82,7 +82,7 @@ func DBGetMovies() Movies {
 }
 
 func DBGetMarkers() Markers {
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/uber")
+	db, err := sql.Open("sqlite3", "../db/sf_movies.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -97,7 +97,7 @@ func DBGetMarkers() Markers {
 	  fun_fact *string
 	)
 
-	rows, err := db.Query("select * from movie_locations;")
+	rows, err := db.Query("select * from movie_locations")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -135,7 +135,7 @@ func DBGetMarkers() Markers {
 }
 
 func DBGetGenreMovieMarkers(genre string) Markers {
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/uber")
+	db, err := sql.Open("sqlite3", "../db/sf_movies.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -150,7 +150,7 @@ func DBGetGenreMovieMarkers(genre string) Markers {
 		fun_fact *string
 	)
 
-	rows, err := db.Query("select * from movie_locations where movie_id in (select movie_id from movies where genre like '%" + genre +"%');")
+	rows, err := db.Query("select * from movie_locations where movie_id in (select movie_id from movies where genre like '%" + genre +"%')")
 
 	if err != nil {
 		log.Fatal(err)
@@ -189,7 +189,7 @@ func DBGetGenreMovieMarkers(genre string) Markers {
 }
 
 func DBGetSelectedMovies(selected string) Movies {
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/uber")
+	db, err := sql.Open("sqlite3", "../db/sf_movies.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -209,7 +209,7 @@ func DBGetSelectedMovies(selected string) Movies {
 		genre *string
 		plot *string
 	)
-	rows, err := db.Query("select * from movies where movie_id in ("+ selected +");")
+	rows, err := db.Query("select * from movies where movie_id in ("+ selected +")")
 	if err != nil {
 		log.Fatal(err)
 	}
