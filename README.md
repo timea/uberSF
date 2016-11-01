@@ -34,16 +34,16 @@ _assuming Go and mysql is installed_
 
 ##Screenshots
 Start screen
-<img src="src/images/start_screen.png" width="800">
+<img src="src/public/images/start_screen.png" width="800">
 
 Overview
-<img src="src/images/overview.png" width="800">
+<img src="src/public/images/overview.png" width="800">
 
 Flyby
-<img src="src/images/flyby.png" width="800">
+<img src="src/public/images/flyby.png" width="800">
 
 Below
-<img src="src/images/below.png" width="800">
+<img src="src/public/images/below.png" width="800">
 
 ##Video
 [Gameplay](https://drive.google.com/file/d/0B1y7015oRTouMlJlZEZNZXo4OFk/view?usp=sharing)
